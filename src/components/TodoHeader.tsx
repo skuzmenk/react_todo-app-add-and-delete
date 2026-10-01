@@ -19,39 +19,43 @@ export const TodoHeader: React.FC<Props> = ({
   onTitleChange,
   onSubmit,
   handleToggle,
-}) => (
-  <header className="todoapp__header">
-    {/* this button should have `active` class only if all todos are completed */}
-    {todos.length !== 0 && (
-      <button
-        type="button"
-        className={
-          todos.find(todo => !todo.completed)
-            ? 'todoapp__toggle-all'
-            : 'todoapp__toggle-all active'
-        }
-        data-cy="ToggleAllButton"
-        onClick={() =>
-          todos.find(todo => !todo.completed)
-            ? todos.map(todo => (!todo.completed ? handleToggle(todo) : 0))
-            : todos.map(todo => handleToggle(todo))
-        }
-      />
-    )}
+}) => {
+  const hasActiveTodos = todos.find(todo => !todo.completed);
 
-    {/* Add a todo on form submit */}
-    <form onSubmit={onSubmit}>
-      <input
-        ref={inputRef}
-        data-cy="NewTodoField"
-        type="text"
-        className="todoapp__new-todo"
-        placeholder="What needs to be done?"
-        autoFocus
-        disabled={tempTodo !== null}
-        value={title}
-        onChange={event => onTitleChange(event.target.value)}
-      />
-    </form>
-  </header>
-);
+  return (
+    <header className="todoapp__header">
+      {/* this button should have `active` class only if all todos are completed */}
+      {todos.length !== 0 && (
+        <button
+          type="button"
+          className={
+            hasActiveTodos
+              ? 'todoapp__toggle-all'
+              : 'todoapp__toggle-all active'
+          }
+          data-cy="ToggleAllButton"
+          onClick={() =>
+            hasActiveTodos
+              ? todos.map(todo => (!todo.completed ? handleToggle(todo) : 0))
+              : todos.map(todo => handleToggle(todo))
+          }
+        />
+      )}
+
+      {/* Add a todo on form submit */}
+      <form onSubmit={onSubmit}>
+        <input
+          ref={inputRef}
+          data-cy="NewTodoField"
+          type="text"
+          className="todoapp__new-todo"
+          placeholder="What needs to be done?"
+          autoFocus
+          disabled={tempTodo !== null}
+          value={title}
+          onChange={event => onTitleChange(event.target.value)}
+        />
+      </form>
+    </header>
+  );
+};
